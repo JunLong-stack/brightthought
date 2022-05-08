@@ -1,16 +1,25 @@
-name: CI
+name: Java CI with Gradle
 
-on: [ push ]
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 16
         uses: actions/septup-java@v2
         with:
+          java-version: '16'
           distribution: "adopt"
-          java-version: 16
-      - name: clean build
-        run: ./gradlew clean test --info --stacktrace
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Run Backend Tests
+        run: ./gradlew test
